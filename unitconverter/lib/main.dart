@@ -78,10 +78,21 @@ class _MyHomePageState extends State<MyHomePage> {
               border: OutlineInputBorder(),
               hintText: "Enter in data",
               fillColor: Color.fromARGB(11, 232, 10, 10)
-            )
+            ),
+            controller: myController,
           ),
         ],)))
-      ],)
+      ],),
+      floatingActionButton: FloatingActionButton(
+        child: Text("Convert to inches"),
+        onPressed: (){
+        showDialog(context: context, builder: (context) {
+          return AlertDialog(
+            content: Text((int.parse(myController.text) * 12).toString()),
+          );
+        });
+
+      }),
     );
   }
 }
