@@ -83,16 +83,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],)))
       ],),
-      floatingActionButton: FloatingActionButton(
-        child: Text("Convert to inches"),
-        onPressed: (){
-        showDialog(context: context, builder: (context) {
-          return AlertDialog(
-            content: Text((int.parse(myController.text) * 12).toString()),
-          );
-        });
-
-      }),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FloatingActionButton(
+          child: Text("convert to inches", textAlign: TextAlign.center),
+          onPressed: (){
+          showDialog(context: context, builder: (context) {
+            return AlertDialog(
+              content: Text((int.parse(myController.text) * 12).toString()),
+            );
+          });
+        
+        }),
+      ),
     );
   }
 }
