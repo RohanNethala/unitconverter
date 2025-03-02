@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Unit Converter App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Unit Converter App'),
     );
   }
 }
@@ -56,7 +56,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final myController = TextEditingController();
-
+  var selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -65,37 +65,74 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    double unit = 12;
+    String unitName = "Length in ft";
+    String newUnit = "inches";
+    switch (selectedIndex) {
+      case 0:
+        unit = 12;
+        unitName = "length in ft to convert to inches";
+        newUnit = "Inches";
+        break;
+      case 1:
+        unit = 2.2;
+        unitName = "weight in lbs to convert to kg";
+        newUnit = "Kilograms";
+        break;
+      case 2:
+        unit = 33.8;
+        unitName = "temperature in Celsius to convert to Fahrenheit";
+        newUnit = "Degrees Fahrenheit";
+        break;
+      case 3:
+        unit = 1.6;
+        unitName = "speed in mph to convert to km/h";
+        newUnit = "Kilometers per hour";
+        break;
+      default:
+        throw UnimplementedError("No widget for $selectedIndex");
+    }
     return Scaffold(
       body: Row(children: [
-        SafeArea(child: NavigationRail(destinations: [
-          NavigationRailDestination(icon: Icon(Icons.abc), label: Text("Uoaan")),
-          NavigationRailDestination(icon: Icon(Icons.abc_sharp), label: Text("Uoaan")),
-        ],indicatorColor: Color.fromARGB(12, 12, 12, 12), selectedIndex: 0)),
-        Expanded(child: Center(child:  Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text("Enter in your data:"),
+        SafeArea(child: NavigationRail(extended: true, destinations: [
+          NavigationRailDestination(icon: Icon(Icons.social_distance), label: Text("Length")),
+          NavigationRailDestination(icon: Icon(Icons.scale), label: Text("Weight/mass")),
+          NavigationRailDestination(icon: Icon(Icons.thermostat), label: Text("Temperature")),
+          NavigationRailDestination(icon: Icon(Icons.speed), label: Text("Speed")),
+        ],indicatorColor: Color.fromARGB(12, 12, 12, 12),
+        selectedIndex: selectedIndex, onDestinationSelected: (value){
+          setState(() {
+            selectedIndex = value;
+          });
+        },)),
+        Expanded(child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text("Enter in $unitName:"),
           TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: "Enter in data",
+              hintText: "Enter in a number",
               fillColor: Color.fromARGB(11, 232, 10, 10)
             ),
             controller: myController,
           ),
-        ],)))
-      ],),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
-          child: Text("convert to inches", textAlign: TextAlign.center),
-          onPressed: (){
-          showDialog(context: context, builder: (context) {
+                  ElevatedButton(onPressed: (){
+          showDialog(context: context, builder: (context){
             return AlertDialog(
-              content: Text((int.parse(myController.text) * 12).toString()),
+              title: Text("Conversion"),
+              content: Text("The conversion is ${int.parse(myController.text) * unit} $newUnit"),
+              actions: [
+                TextButton(onPressed: (){
+                  Navigator.of(context).pop();
+                }, child: Text("Close"))
+              ],
             );
           });
+        }, child: Text("Convert")),
+
+        ]))),
+        ],
         
-        }),
-      ),
-    );
+      )
+      );
   }
 }
